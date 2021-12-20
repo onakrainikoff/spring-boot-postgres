@@ -1,0 +1,43 @@
+spring:
+  profiles:
+    active: tests-local
+db:
+  master:
+    username: 'postgres'
+    password: 'postgres'
+    driverClassName: 'org.postgresql.Driver'
+    minimumIdle: 5
+    maximumPoolSize: 10
+    connectionTimeout: 10000
+    validationTimeout: 5000
+    connectionTestQuery: 'SELECT 1'
+  slave:
+    username: 'postgres'
+    password: 'postgres'
+    driverClassName: 'org.postgresql.Driver'
+    minimumIdle: 5
+    maximumPoolSize: 10
+    connectionTimeout: 10000
+    validationTimeout: 5000
+    connectionTestQuery: 'SELECT 1'
+
+---
+spring:
+  config:
+    activate:
+      on-profile: tests-local
+db:
+  master:
+    jdbcUrl: 'jdbc:postgresql://localhost:5432/postgres'
+  slave:
+    jdbcUrl: 'jdbc:postgresql://localhost:5433/postgres'
+---
+spring:
+  config:
+    activate:
+      on-profile: tests-remote
+db:
+  master:
+    jdbcUrl: 'jdbc:postgresql://${postgres_master_host}:${postgres_master_port}/postgres'
+  slave:
+    jdbcUrl: 'jdbc:postgresql://${postgres_slave_host}:${postgres_slave_port}/postgres'
